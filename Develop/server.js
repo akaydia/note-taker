@@ -1,34 +1,25 @@
 const express = require('express');
+const path = require('path');
+// Import routers
+const api = require('./routes/index');
+
 const app = express();
-const port = 3001;
+const PORT = process.env.PORT || 3000;
 
+// Middleware for parsing request body as JSON
 app.use(express.json());
-app.use(express.static('public'));
-let notes = [];
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
-// Define API endpoints
-app.get('/api/notes', (req, res) => {
-    res.json(notes);
+// Middleware for routes
+app.use('/api', api);
+
+// GET route for homepage
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "./public/index.html"));
 });
 
-app.post('/api/notes', (req, res) => {
-    const newNote = req.body;
-    newNote.id = notes.length;
-    notes.push(newNote);
-    res.json(newNote);
-});
-
-app.delete('/api/notes/:id', (req, res) => {
-    const id = parseInt(req.params.id);
-    notes = notes.filter((note) => note.id !== id);
-    res.sendStatus(204);
-});
-
-// Serve index.html file
-app.get('/notes', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
-});
-
-app.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`);
+// Start the server
+app.listen(PORT, () => {
+  console.log(`App listening on: http://localhost:${PORT}`);
 });
