@@ -1,37 +1,43 @@
-const router = require('express').Router();
+const notes = require('express').Router();
 const { v4: uuidv4 } = require('../helpers/uuid');
 const { readFromFile, readAndAppend, writeToFile } = require('../helpers/fsUtil');
 
 // GET Route for retrieving all the notes
-router.get('/', (req, res) => {
+notes.get('/', (req, res) => {
     readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
-});
+  });
 
-// POST Route for a new note
-router.post('/', (req, res) => {
+notes.post('/', (req, res) => {
     console.info(`${req.method} request received to add a note`);
-
+  
     // Destructuring assignment for the items in req.body
     const { title, text } = req.body;
-
+  
     // If all the required properties are present
     if (title && text) {
-        // Variable for the object we will save
-        const newNote = {
-            title,
-            text,
-            note_id: uuidv4(),
-        };
-
-        readAndAppend(newNote, './db/db.json');
-        res.json(`Note added successfully 🚀`);
+      // Variable for the object we will save
+      const newNote = {
+        title,
+        text,
+        note_id: uuidv4(),
+      };
+  
+      // Use a Promise to handle async behavior of file I/O
+      readAndAppend(newNote, './db/db.json')
+        .then(() => {
+          res.json(`Note added successfully 🚀`);
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).send('Error in adding note');
+        });
     } else {
-        res.error('Error in adding note');
+      res.status(400).send('Error in adding note');
     }
-});
+  });
 
 // DELETE Route for a note
-router.delete('/:id', (req, res) => {
+notes.delete('/:id', (req, res) => {
     console.info(`${req.method} request received to delete a note`);
 
     // Get the id of the note to be deleted from the request parameters
@@ -64,4 +70,4 @@ router.delete('/:id', (req, res) => {
     });
 });
 
-module.exports = router;
+module.exports = notes;
