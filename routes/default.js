@@ -8,7 +8,7 @@ defaultRouter.get('/', (req, res) => {
 
 // GET route for notes page
 defaultRouter.get('/notes', (req, res) => {
-    res.sendFile(path.join(__dirname, "../public/pages/notes.html"));
+    res.sendFile(path.join(__dirname, "../public/notes.html"));
 });
 
 module.exports = defaultRouter;

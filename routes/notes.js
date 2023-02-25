@@ -4,7 +4,9 @@ const { readFromFile, readAndAppend, writeToFile } = require('../helpers/fsUtil'
 
 // GET Route for retrieving all the notes
 notes.get('/', (req, res) => {
+    
     readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)));
+    console.log("logging data", data);
   });
 
 notes.post('/', (req, res) => {
@@ -23,7 +25,7 @@ notes.post('/', (req, res) => {
       };
   
       // Use a Promise to handle async behavior of file I/O
-      readAndAppend(newNote, './db/db.json')
+      readAndAppend(newNote, '../db/db.json')
         .then(() => {
           res.json(`Note added successfully 🚀`);
         })

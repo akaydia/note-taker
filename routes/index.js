@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-app.use('/api/notes', notesRouter);
+app.use('/api', notesRouter);
 app.use('/', defaultRouter);
 
 module.exports = app;
