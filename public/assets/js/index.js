@@ -178,9 +178,6 @@ if (window.location.pathname === '/notes') {
   newNoteBtn.addEventListener('click', handleNewNoteView);
   noteTitle.addEventListener('keyup', handleRenderSaveBtn);
   noteText.addEventListener('keyup', handleRenderSaveBtn);
-  console.log("PLEASE MAKING KEY UP WORK");
 }
 
 getAndRenderNotes();
-console.log("page loaded");
-
